@@ -1,33 +1,52 @@
 stages:
-  - lint
-  - test
+  - build
+  - deliver
+  - deploy
 
-variables:
-  POSTGRES_USER: 'michacabuco_admin'
-  POSTGRES_PASSWORD: ''
-  POSTGRES_DB: 'test_michacabuco_admin'
-
-flake8:
-  stage: lint
-  image: python:3.7-alpine
-  before_script:
-    - pip install -q flake8
-  script:
-    - flake8
-
-pytest:
-  stage: test
-  image: python:3.7
-  tags:
-    - docker
+build:
+  stage: build
+  image: docker:latest
   services:
-    - postgres:11
-  variables:
-    DATABASE_URL: pgsql://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres/$POSTGRES_DB
-
+    - docker:dind
   before_script:
-    - pip install -r requirements/local.txt
-
+    - mkdir images
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - pytest
+    - docker build --pull -t $CI_REGISTRY_IMAGE -f compose/production/django/Dockerfile .
+    - docker save $CI_REGISTRY_IMAGE > images/api.tar
+  artifacts:
+    paths:
+      - images
+  only:
+    - production
 
+deliver:
+  stage: deliver
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker load -i images/api.tar
+    - docker push $CI_REGISTRY_IMAGE
+  dependencies:
+    - build
+  only:
+    - production
+
+deploy:
+  stage: deploy
+  image: ubuntu
+  before_script:
+    - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )"
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan api.michacabuco.com >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - ssh root@api.michacabuco.com deploy $CI_JOB_TOKEN $CI_REGISTRY
+  only:
+    - production
