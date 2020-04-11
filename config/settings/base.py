@@ -68,12 +68,15 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "rest_framework",
+    "dynamic_rest",
     "django_admin_listfilter_dropdown",
+    "ckeditor",
 ]
 
 LOCAL_APPS = [
     "michacabuco_admin.users.apps.UsersConfig",
     "michacabuco_admin.pharmacies.apps.PharmaciesConfig",
+    "michacabuco_admin.events.apps.EventsConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -264,7 +267,7 @@ ACCOUNT_ADAPTER = "michacabuco_admin.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "michacabuco_admin.users.adapters.SocialAccountAdapter"
 
-# django-reset-framework
+# django-rest-framework
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
@@ -285,5 +288,7 @@ REST_FRAMEWORK = {
         "djangorestframework_camel_case.parser.CamelCaseJSONParser",
     ),
 }
+# dynamic-rest - https://github.com/AltSchool/dynamic-rest#settings
+DYNAMIC_REST = {"ENABLE_LINKS": False}
 # Your stuff...
 # ------------------------------------------------------------------------------

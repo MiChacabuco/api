@@ -13,7 +13,9 @@ django-allauth==0.41.0  # https://github.com/pennersr/django-allauth
 django-crispy-forms==1.9.0  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==4.11.0  # https://github.com/niwinz/django-redis
 django-admin-list-filter-dropdown==1.0.3  # https://github.com/mrts/django-admin-list-filter-dropdown
+django-ckeditor==5.9.0  # https://github.com/django-ckeditor/django-ckeditor
 
 # Django REST Framework
 djangorestframework==3.11.0  # https://github.com/encode/django-rest-framework
 djangorestframework-camel-case==1.1.2  # https://github.com/vbabiy/djangorestframework-camel-case
+dynamic-rest==1.9.6  # https://github.com/AltSchool/dynamic-rest
