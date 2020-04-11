@@ -1,10 +1,10 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 
 from .models import PharmacyShift
 from .serializers import PharmacyShiftSerializer
 
 
-class PharmacyShiftViewSet(viewsets.ModelViewSet):
+class PharmacyShiftViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = PharmacyShiftSerializer
 
     def get_queryset(self):
