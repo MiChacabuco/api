@@ -16,3 +16,4 @@ django-admin-list-filter-dropdown==1.0.3  # https://github.com/mrts/django-admin
 
 # Django REST Framework
 djangorestframework==3.11.0  # https://github.com/encode/django-rest-framework
+djangorestframework-camel-case==1.1.2  # https://github.com/vbabiy/djangorestframework-camel-case
