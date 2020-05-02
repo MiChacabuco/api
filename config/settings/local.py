@@ -8,7 +8,7 @@ DEBUG = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
-    default="7QTqcylBdX9hNpEan0NBKgy3ACDpFJh4Wqw4rBB8eVBA4Sr1qighHsnmiykKaW3N",
+    default="ETrHiigmu2TjmiT41W6mz6iRdtF5bvjEIpLCp62OGfBDBgFYuRzFyyxpdkAEsicG",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "192.168.0.131"]
@@ -47,7 +47,7 @@ if env("USE_DOCKER") == "yes":
     import socket
 
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
+    INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 
 # django-extensions
 # ------------------------------------------------------------------------------
