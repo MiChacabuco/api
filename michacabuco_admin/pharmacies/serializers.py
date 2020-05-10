@@ -1,16 +1,29 @@
+from dynamic_rest.fields import DynamicRelationField
+from dynamic_rest.serializers import DynamicModelSerializer
 from pytz import timezone
 from rest_framework import serializers
 from rest_framework.fields import DateTimeField
 
-from .models import PharmacyShift
+from michacabuco_admin.businesses.serializers import BusinessSerializer
+from .models import PharmacyShift, PharmacyShiftLegacy
 
 utc_timezone = timezone("UTC")
 
 
-class PharmacyShiftSerializer(serializers.ModelSerializer):
+class PharmacyShiftSerializer(DynamicModelSerializer):
+    pharmacy = DynamicRelationField(BusinessSerializer, embed=True)
     start = DateTimeField(default_timezone=utc_timezone)
     end = DateTimeField(default_timezone=utc_timezone)
 
     class Meta:
         model = PharmacyShift
+        fields = ["pharmacy", "start", "end"]
+
+
+class PharmacyShiftLegacySerializer(serializers.ModelSerializer):
+    start = DateTimeField(default_timezone=utc_timezone)
+    end = DateTimeField(default_timezone=utc_timezone)
+
+    class Meta:
+        model = PharmacyShiftLegacy
         fields = ["pharmacy", "start", "end"]

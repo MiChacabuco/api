@@ -3,3 +3,15 @@
 USE_DOCKER=yes
 IPYTHONDIR=/app/.ipython
 API_VERSION=v1
+BASE_URL=http://127.0.0.1:8000
+
+# Redis
+# ------------------------------------------------------------------------------
+REDIS_URL=redis://redis:6379/0
+
+# Celery
+# ------------------------------------------------------------------------------
+
+# Flower
+CELERY_FLOWER_USER=celery
+CELERY_FLOWER_PASSWORD=password

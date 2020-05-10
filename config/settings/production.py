@@ -3,6 +3,7 @@ import logging
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
 
 from .base import *  # noqa
 from .base import env
@@ -16,8 +17,6 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["admin.michacabuco.com
 
 # DATABASES
 # ------------------------------------------------------------------------------
-DATABASES["default"] = env.db("DATABASE_URL")  # noqa F405
-DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa F405
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)  # noqa F405
 
 # CACHES
@@ -31,6 +30,7 @@ CACHES = {
             # Mimicing memcache behavior.
             # http://jazzband.github.io/django-redis/latest/#_memcached_exceptions_behavior
             "IGNORE_EXCEPTIONS": True,
+            "PARSER_CLASS": "redis.connection.HiredisParser",
         },
     }
 }
@@ -91,6 +91,7 @@ aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws
 STATICFILES_STORAGE = "michacabuco_admin.utils.storages.StaticRootS3Boto3Storage"
 COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
 STATIC_URL = f"https://{aws_s3_domain}/static/"
+
 # MEDIA
 # ------------------------------------------------------------------------------
 DEFAULT_FILE_STORAGE = "michacabuco_admin.utils.storages.MediaRootS3Boto3Storage"
@@ -209,7 +210,10 @@ sentry_logging = LoggingIntegration(
     level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
     event_level=logging.ERROR,  # Send errors as events
 )
-sentry_sdk.init(dsn=SENTRY_DSN, integrations=[sentry_logging, DjangoIntegration()])
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[sentry_logging, DjangoIntegration(), CeleryIntegration()],
+)
 
 # Your stuff...
 # ------------------------------------------------------------------------------

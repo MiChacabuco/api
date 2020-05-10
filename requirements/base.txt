@@ -1,23 +1,30 @@
-pytz==2019.3  # https://github.com/stub42/pytz
+pytz==2020.1  # https://github.com/stub42/pytz
 python-slugify==4.0.0  # https://github.com/un33k/python-slugify
-Pillow==7.1.1  # https://github.com/python-pillow/Pillow
+Pillow==7.1.2  # https://github.com/python-pillow/Pillow
 rcssmin==1.0.6  # https://github.com/ndparker/rcssmin
-argon2-cffi==19.2.0  # https://github.com/hynek/argon2_cffi
-redis==3.4.1 # https://github.com/andymccurdy/redis-py
+argon2-cffi==20.1.0  # https://github.com/hynek/argon2_cffi
+redis==3.5.0 # https://github.com/andymccurdy/redis-py
+hiredis==1.0.1  # https://github.com/redis/hiredis-py
+celery==4.4.5  # pyup: < 5.0  # https://github.com/celery/celery
+django-celery-beat==2.0.0  # https://github.com/celery/django-celery-beat
+flower==0.9.4  # https://github.com/mher/flower
+requests==2.24.0  # https://github.com/psf/requests
 
 # Django
 # ------------------------------------------------------------------------------
 django==2.2.12  # pyup: < 3.0  # https://www.djangoproject.com/
 django-environ==0.4.5  # https://github.com/joke2k/django-environ
 django-model-utils==4.0.0  # https://github.com/jazzband/django-model-utils
-django-allauth==0.41.0  # https://github.com/pennersr/django-allauth
-django-crispy-forms==1.9.0  # https://github.com/django-crispy-forms/django-crispy-forms
+django-allauth==0.42.0  # https://github.com/pennersr/django-allauth
+django-crispy-forms==1.9.1  # https://github.com/django-crispy-forms/django-crispy-forms
 django-compressor==2.4  # https://github.com/django-compressor/django-compressor
-django-redis==4.11.0  # https://github.com/jazzband/django-redis
+django-redis==4.12.1  # https://github.com/jazzband/django-redis
 django-admin-list-filter-dropdown==1.0.3  # https://github.com/mrts/django-admin-list-filter-dropdown
+django-admin-autocomplete-filter==0.5  # https://github.com/farhan0581/django-admin-autocomplete-filter
 django-ckeditor==5.9.0  # https://github.com/django-ckeditor/django-ckeditor
+django-celery-email==3.0.0  # https://github.com/pmclanahan/django-celery-email
 
 # Django REST Framework
 djangorestframework==3.11.0  # https://github.com/encode/django-rest-framework
-djangorestframework-camel-case==1.1.2  # https://github.com/vbabiy/djangorestframework-camel-case
+djangorestframework-camel-case==1.2.0  # https://github.com/vbabiy/djangorestframework-camel-case
 dynamic-rest==1.9.6  # https://github.com/AltSchool/dynamic-rest

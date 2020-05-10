@@ -1,16 +1,10 @@
 from django.contrib import admin
 from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 
-from .models import Pharmacy, PharmacyShift
+from .models import PharmacyShift, PharmacyShiftLegacy, Pharmacy
 
 
-@admin.register(Pharmacy)
-class PharmacyAdmin(admin.ModelAdmin):
-    list_display = ["__str__", "id"]
-
-
-@admin.register(PharmacyShift)
-class PharmacyShiftAdmin(admin.ModelAdmin):
+class AbstractPharmacyShiftAdmin(admin.ModelAdmin):
     list_display = ["pharmacy_name", "start", "end"]
     list_select_related = ["pharmacy"]
     list_filter = [("pharmacy", RelatedDropdownFilter)]
@@ -23,3 +17,20 @@ class PharmacyShiftAdmin(admin.ModelAdmin):
         return shift.pharmacy.name
 
     pharmacy_name.short_description = "farmacia"
+
+
+@admin.register(PharmacyShift)
+class PharmacyShiftAdmin(AbstractPharmacyShiftAdmin):
+    pass
+
+
+# TODO: Legacy, delete after a while.
+@admin.register(PharmacyShiftLegacy)
+class PharmacyShiftLegacyAdmin(AbstractPharmacyShiftAdmin):
+    pass
+
+
+# TODO: Legacy, delete after a while.
+@admin.register(Pharmacy)
+class PharmacyAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "id")
