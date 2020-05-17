@@ -268,6 +268,12 @@ ACCOUNT_ADAPTER = "michacabuco_admin.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "michacabuco_admin.users.adapters.SocialAccountAdapter"
 
+# django-compressor
+# ------------------------------------------------------------------------------
+# https://django-compressor.readthedocs.io/en/latest/quickstart/#installation
+INSTALLED_APPS += ["compressor"]
+STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
+
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/

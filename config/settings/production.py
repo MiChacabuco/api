@@ -135,6 +135,23 @@ ANYMAIL = {
     "MAILGUN_API_URL": env("MAILGUN_API_URL", default="https://api.mailgun.net/v3"),
 }
 
+# django-compressor
+# ------------------------------------------------------------------------------
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_ENABLED
+COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=True)
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_STORAGE
+COMPRESS_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_URL
+COMPRESS_URL = STATIC_URL
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_FILTERS
+COMPRESS_FILTERS = {
+    "css": [
+        "compressor.filters.css_default.CssAbsoluteFilter",
+        "compressor.filters.cssmin.rCSSMinFilter",
+    ],
+    "js": ["compressor.filters.jsmin.JSMinFilter"],
+}
+
 # Collectfast
 # ------------------------------------------------------------------------------
 # https://github.com/antonagestam/collectfast#installation
