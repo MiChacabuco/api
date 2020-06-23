@@ -11,8 +11,8 @@ class EventDateInline(admin.StackedInline):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    fields = ("title", "body", "image", "youtube")
-    inlines = (EventDateInline,)
+    fields = ["title", "body", "image", "youtube"]
+    inlines = [EventDateInline]
 
     def get_queryset(self, request):
         return Event.objects.filter(created_by=request.user)

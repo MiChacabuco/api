@@ -6,15 +6,15 @@ from .models import Pharmacy, PharmacyShift
 
 @admin.register(Pharmacy)
 class PharmacyAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "id")
+    list_display = ["__str__", "id"]
 
 
 @admin.register(PharmacyShift)
 class PharmacyShiftAdmin(admin.ModelAdmin):
-    list_display = ("pharmacy_name", "start", "end")
-    list_select_related = ("pharmacy",)
-    list_filter = (("pharmacy", RelatedDropdownFilter),)
-    exclude = ("end",)
+    list_display = ["pharmacy_name", "start", "end"]
+    list_select_related = ["pharmacy"]
+    list_filter = [("pharmacy", RelatedDropdownFilter)]
+    exclude = ["end"]
 
     def get_queryset(self, request):
         return PharmacyShift.objects.get_unfinished()

@@ -13,7 +13,7 @@ class Pharmacy(models.Model):
         return self.name
 
     class Meta:
-        ordering = ("name",)
+        ordering = ["name"]
         verbose_name = "farmacia"
         verbose_name_plural = "farmacias"
 
@@ -46,6 +46,6 @@ class PharmacyShift(models.Model):
         self.end = end
 
     class Meta:
-        ordering = ("start",)
+        ordering = ["start"]
         verbose_name = "turno de farmacia"
         verbose_name_plural = "turnos de farmacias"

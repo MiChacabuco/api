@@ -39,6 +39,6 @@ class EventDate(models.Model):
         return date.strftime("%d/%m/%Y %H:%M")
 
     class Meta:
-        ordering = ("start",)
+        ordering = ["start"]
         verbose_name = "fecha de evento"
         verbose_name_plural = "fechas de evento"

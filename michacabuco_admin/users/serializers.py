@@ -6,4 +6,4 @@ from .models import User
 class UserSerializer(DynamicModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "username", "name")
+        fields = ["id", "username", "name"]

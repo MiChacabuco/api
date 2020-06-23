@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': 'farmacia',
                 'verbose_name_plural': 'farmacias',
-                'ordering': ('name',),
+                'ordering': ['name'],
             },
         ),
         migrations.CreateModel(
@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': 'turno de farmacia',
                 'verbose_name_plural': 'turnos de farmacias',
-                'ordering': ('start',),
+                'ordering': ['start'],
             },
         ),
     ]

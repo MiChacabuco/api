@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': 'fecha de evento',
                 'verbose_name_plural': 'fechas de evento',
-                'ordering': ('start',),
+                'ordering': ['start'],
             },
         ),
     ]

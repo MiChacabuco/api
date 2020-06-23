@@ -13,4 +13,4 @@ class PharmacyShiftSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PharmacyShift
-        fields = ("pharmacy", "start", "end")
+        fields = ["pharmacy", "start", "end"]

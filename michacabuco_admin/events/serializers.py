@@ -10,7 +10,7 @@ class EventSerializer(DynamicModelSerializer):
 
     class Meta:
         model = Event
-        fields = ("id", "title", "body", "image", "youtube", "created_by")
+        fields = ["id", "title", "body", "image", "youtube", "created_by"]
 
 
 class EventDateSerializer(DynamicModelSerializer):
@@ -18,4 +18,4 @@ class EventDateSerializer(DynamicModelSerializer):
 
     class Meta:
         model = EventDate
-        fields = ("event", "start", "end")
+        fields = ["event", "start", "end"]
