@@ -95,7 +95,8 @@ STATIC_URL = f"https://{aws_s3_domain}/static/"
 # MEDIA
 # ------------------------------------------------------------------------------
 DEFAULT_FILE_STORAGE = "michacabuco_admin.utils.storages.MediaRootS3Boto3Storage"
-MEDIA_URL = f"https://{aws_s3_domain}/media/"
+MEDIA_DOMAIN = env("DJANGO_MEDIA_DOMAIN")
+MEDIA_URL = f"https://{MEDIA_DOMAIN}/media/"
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
