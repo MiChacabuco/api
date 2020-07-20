@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.contrib.gis.geos import Point
+from django.utils.encoding import filepath_to_uri
 from dynamic_rest.fields import DynamicRelationField
 from dynamic_rest.serializers import DynamicModelSerializer
 from rest_framework.fields import SerializerMethodField
@@ -15,6 +17,7 @@ class PhonesSerializer(DynamicModelSerializer):
 class BusinessSerializer(DynamicModelSerializer):
     phones = DynamicRelationField(PhonesSerializer, many=True, embed=True)
     point = SerializerMethodField()
+    avatar = SerializerMethodField()
 
     class Meta:
         model = Business
@@ -41,6 +44,12 @@ class BusinessSerializer(DynamicModelSerializer):
     def get_point(self, business: Business):
         point: Point = business.point
         return [point.x, point.y] if point else None
+
+    def get_avatar(self, business: Business):
+        if not business.avatar:
+            return None
+        filepath = filepath_to_uri(business.avatar.name)
+        return f"{settings.MEDIA_URL}{filepath}"
 
     def to_representation(self, instance):
         # Remove falsy values from the representation
