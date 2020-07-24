@@ -19,23 +19,18 @@ class BusinessViewSet(
     serializer_class = BusinessSerializer
 
     def get_queryset(self, queryset=None):
-        query_params = self.request.query_params
-
         # Get visible businesses
         qs = Business.objects.filter(is_visible=True)
 
         # Filter by name and tags
+        query_params = self.request.query_params
         search = query_params.get("search")
         if search:
             words = search.split(" ")
-
-            # All the words should be in the name or the tags
-            name_qs = tags_qs = qs
+            filters = Q(name__unaccent__icontains=search)
             for word in words:
-                name_qs = name_qs & qs.filter(name__unaccent__icontains=search)
-                tags_qs = tags_qs & qs.filter(tags__value__unaccent__startswith=word)
-
-            qs = (name_qs | tags_qs).distinct()
+                filters = filters | Q(tags__value__unaccent__startswith=word)
+            qs = qs.filter(filters)
 
         # Order by distance
         point_from = query_params.get("point")
