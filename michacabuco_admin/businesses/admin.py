@@ -23,7 +23,7 @@ class TagAdmin(ModelAdmin):
 @admin.register(Business)
 class BusinessAdmin(ModelAdmin):
     inlines = [BusinessPhoneInlineAdmin]
-    list_filter = [IsPharmacyFilter]
+    list_filter = ["is_visible", IsPharmacyFilter]
     formfield_overrides = {
         PointField: {"widget": LatLongWidget},
         TextField: {"widget": Textarea(attrs={"rows": 3, "cols": 60})},
