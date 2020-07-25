@@ -61,7 +61,10 @@ class BusinessSerializer(DynamicModelSerializer):
             del ret[k]
 
         # Add distance field
-        if instance.distance:
+        try:
             ret["distance"] = round(instance.distance.m)
+        except AttributeError:
+            # No distance, don't do anything.
+            pass
 
         return ret
