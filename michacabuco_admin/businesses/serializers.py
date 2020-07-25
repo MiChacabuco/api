@@ -61,7 +61,7 @@ class BusinessSerializer(DynamicModelSerializer):
             del ret[k]
 
         # Add distance field
-        if hasattr(instance, "distance"):
+        if instance.distance:
             ret["distance"] = round(instance.distance.m)
 
         return ret
