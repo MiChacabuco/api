@@ -1,53 +1,35 @@
-import requests
-from django.contrib.gis.geos import Point
-from django.core.exceptions import ValidationError
-from django.core.validators import URLValidator
+import re
+from os import environ
+
+from django.conf import settings
+from django.core.mail import send_mail
+from django.urls import reverse
 
 
-def set_business_point(business: "Business"):
-    """Calculate coordinates from business' address"""
-    address = business.address
-    if not address:
-        # No address, clear point.
-        business.point = None
-        return
-    url = "https://nominatim.openstreetmap.org/search"
-    params = {"street": address, "postalcode": "6740", "format": "json"}
-    try:
-        response = requests.get(url, params, timeout=2)
-        response.raise_for_status()
-    except requests.exceptions.RequestException:
-        # Request failed, do nothing.
-        return
-    response_json = response.json()
-    try:
-        result = response_json[0]
-        lon, lat = float(result["lon"]), float(result["lat"])
-    except (IndexError, KeyError):
-        # No results, do nothing.
-        return
-    business.point = Point(lon, lat)
+def notify_business_modification(business: "Business", created: bool):
+    verb = "creado" if created else "modificado"
+    url = reverse("admin:businesses_business_change", args=[business.id])
+    url = f"{environ['BASE_URL']}{url}"
+    message = f'El negocio "{business.name}" fue {verb}.'
+    html = (
+        f'El negocio <a href="{url}" target="_blank">"{business.name}"</a> fue {verb}.'
+    )
+    send_mail(
+        f"Negocio {verb}",
+        message,
+        None,
+        [email for _, email in settings.ADMINS],
+        html_message=html,
+    )
 
 
-def set_business_facebook(business: "Business"):
-    """Convert FB URL to FB ID"""
-    facebook = business.facebook
-    if not "facebook.com" in facebook:
-        # Not an URL, do nothing.
-        return
-
-    url = "https://findmyfbid.com"
-    data = {"url": facebook}
-    try:
-        response = requests.post(url, data, timeout=2)
-        response.raise_for_status()
-    except requests.exceptions.RequestException:
-        # Request failed, do nothing.
-        return
-    response_json = response.json()
-    try:
-        id = response_json["id"]
-    except (KeyError, TypeError):
-        # No results, do nothing.
-        return
-    business.facebook = id
+def instagram_url_to_username(url: str):
+    """Convert Instagram URL to username"""
+    url_match = re.search("instagram.com/([^?/]+)", url)
+    if url_match:
+        try:
+            instagram_username = url_match.group(1)
+            return instagram_username
+        except IndexError:
+            pass
+    return url

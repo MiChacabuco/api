@@ -7,6 +7,8 @@ from django.http import HttpRequest
 
 from .filters import IsPharmacyFilter
 from .models import Business, BusinessPhone, Tag
+from .tasks import set_business_point, set_business_facebook
+from .utils import notify_business_modification
 from ..widgets import LatLongWidget
 
 
@@ -75,10 +77,15 @@ class BusinessAdmin(ModelAdmin):
         return fieldsets
 
     def save_model(self, request: HttpRequest, business: Business, form, change: bool):
+        user = request.user
         if not change:
             # Link with the user that created the business
-            business.created_by = request.user
+            business.created_by = user
         business.save()
+
+        if not user.is_superuser:
+            # Saved by user, send notification to admins.
+            notify_business_modification(self, not change)
 
     def has_delete_permission(self, request: HttpRequest, obj=None):
         return request.user.is_superuser

@@ -1,10 +1,10 @@
-import re
 import uuid
 
 from django.contrib.gis.db import models
 from model_utils.models import TimeStampedModel
 
-from .utils import set_business_point, set_business_facebook
+from .tasks import set_business_point, set_business_facebook
+from .utils import instagram_url_to_username
 from .validators import validate_file_size_limit
 from michacabuco_admin.users.models import User
 
@@ -70,29 +70,17 @@ class Business(TimeStampedModel):
         return self.name
 
     def save(self, **kwargs):
-        try:
-            current_business = Business.objects.get(id=self.id)
-            current_address = current_business.address
-            current_facebook = current_business.facebook
-        except Business.DoesNotExist:
-            current_address = current_facebook = ""
+        self.instagram = instagram_url_to_username(self.instagram)
 
-        # Update business' point if the address changed
-        if self.address != current_address:
-            set_business_point(self)
+        if not self.address:
+            # Clear point when the address is removed
+            self.point = None
+        else:
+            # Async task to set point
+            set_business_point.delay(self.id, self.address)
 
-        # Get business' FB ID if the URL changed
-        if self.facebook != current_facebook:
-            set_business_facebook(self)
-
-        # Convert Instagram URL to user
-        match = re.search("instagram.com/([^?/]+)", self.instagram)
-        if match:
-            try:
-                instagram_username = match.group(1)
-                self.instagram = instagram_username
-            except IndexError:
-                pass
+        # Async task to set Facebook
+        set_business_facebook.delay(self.id, self.facebook)
 
         super().save(**kwargs)
 
