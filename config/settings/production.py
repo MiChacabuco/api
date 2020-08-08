@@ -88,15 +88,12 @@ aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws
 
 # STATIC
 # ------------------------
-STATICFILES_STORAGE = "michacabuco_admin.utils.storages.StaticRootS3Boto3Storage"
-COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
-STATIC_URL = f"https://{aws_s3_domain}/static/"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # MEDIA
 # ------------------------------------------------------------------------------
 DEFAULT_FILE_STORAGE = "michacabuco_admin.utils.storages.MediaRootS3Boto3Storage"
-MEDIA_DOMAIN = env("DJANGO_MEDIA_DOMAIN")
-MEDIA_URL = f"https://{MEDIA_DOMAIN}/media/"
+MEDIA_URL = f"https://{aws_s3_domain}/media/"
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
@@ -146,9 +143,11 @@ ANYMAIL = {
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_ENABLED
 COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=True)
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_STORAGE
-COMPRESS_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_URL
 COMPRESS_URL = STATIC_URL
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_OFFLINE
+COMPRESS_OFFLINE = True  # Offline compression is required when using Whitenoise
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_FILTERS
 COMPRESS_FILTERS = {
     "css": [
@@ -157,11 +156,6 @@ COMPRESS_FILTERS = {
     ],
     "js": ["compressor.filters.jsmin.JSMinFilter"],
 }
-
-# Collectfast
-# ------------------------------------------------------------------------------
-# https://github.com/antonagestam/collectfast#installation
-INSTALLED_APPS = ["collectfast"] + INSTALLED_APPS  # noqa F405
 
 # LOGGING
 # ------------------------------------------------------------------------------
