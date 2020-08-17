@@ -5,7 +5,7 @@ from model_utils.models import TimeStampedModel
 
 from .tasks import set_business_point, set_business_facebook
 from .utils import instagram_url_to_username
-from .validators import validate_file_size_limit
+from .validators import validate_image_size
 from michacabuco_admin.users.models import User
 
 
@@ -31,7 +31,7 @@ class Business(TimeStampedModel):
         blank=True,
         null=True,
         help_text="Logo o imagen de su comercio/negocio. Tamaño máximo: 5MB.",
-        validators=[validate_file_size_limit(5)],
+        validators=[validate_image_size],
     )
     address = models.CharField(
         "dirección",
