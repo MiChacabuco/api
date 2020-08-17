@@ -20,7 +20,14 @@ def get_default_shift_start():
     return now
 
 
-class AbstractPharmacyShift(models.Model):
+class PharmacyShift(models.Model):
+    pharmacy = models.ForeignKey(
+        Business,
+        models.CASCADE,
+        limit_choices_to={"tags__value": "farmacias"},
+        verbose_name="farmacia",
+        related_name="+",
+    )
     start = models.DateTimeField("inicio", default=get_default_shift_start)
     end = models.DateTimeField("fin")
     objects = PharmacyShiftManager()
@@ -32,38 +39,6 @@ class AbstractPharmacyShift(models.Model):
         self.end = end
 
     class Meta:
-        abstract = True
         ordering = ["start"]
         verbose_name = "turno de farmacia"
         verbose_name_plural = "turnos de farmacias"
-
-
-class PharmacyShift(AbstractPharmacyShift):
-    pharmacy = models.ForeignKey(
-        Business,
-        models.CASCADE,
-        limit_choices_to={"tags__value": "farmacias"},
-        verbose_name="farmacia",
-        related_name="+",
-    )
-
-
-class Pharmacy(models.Model):
-    # TODO: Legacy, delete after a while.
-    id = models.CharField(primary_key=True, max_length=24)
-    name = models.CharField("nombre", max_length=255)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        ordering = ["name"]
-        verbose_name = "farmacia"
-        verbose_name_plural = "farmacias"
-
-
-class PharmacyShiftLegacy(AbstractPharmacyShift):
-    # TODO: Legacy, delete after a while.
-    pharmacy = models.ForeignKey(
-        Pharmacy, models.CASCADE, verbose_name="farmacia", related_name="shifts"
-    )

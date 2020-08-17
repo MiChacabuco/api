@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rest_framework.fields import DateTimeField
 
 from michacabuco_admin.businesses.serializers import BusinessSerializer
-from .models import PharmacyShift, PharmacyShiftLegacy
+from .models import PharmacyShift
 
 utc_timezone = timezone("UTC")
 
@@ -17,13 +17,4 @@ class PharmacyShiftSerializer(DynamicModelSerializer):
 
     class Meta:
         model = PharmacyShift
-        fields = ["pharmacy", "start", "end"]
-
-
-class PharmacyShiftLegacySerializer(serializers.ModelSerializer):
-    start = DateTimeField(default_timezone=utc_timezone)
-    end = DateTimeField(default_timezone=utc_timezone)
-
-    class Meta:
-        model = PharmacyShiftLegacy
         fields = ["pharmacy", "start", "end"]
