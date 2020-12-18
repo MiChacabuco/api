@@ -1,7 +1,7 @@
-MiChacabuco Admin
+MiChacabuco
 =================
 
-MiChacabuco Admin and API
+MiChacabuco's admin panel and API
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/
